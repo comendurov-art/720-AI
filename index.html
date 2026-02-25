@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>720 – AI Study Mentor</title>
+    <style>
+        :root {
+            --primary: #0A84FF;
+            --bg: #F8F9FA;
+            --text: #1D1D1F;
+            --text-muted: #86868B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+            --border: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg: #000000;
+            --text: #F5F5F7;
+            --text-muted: #A1A1A6;
+            --card-bg: #1C1C1E;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding-top: 120px;
+        }
+
+        .badge {
+            background: rgba(10, 132, 255, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .hero h2 {
+            font-size: 24px;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            color: var(--text);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-visual {
+            font-size: 80px;
+            margin-top: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 48px;
+        }
+
+        /* Muammo Section */
+        .muammo {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 60px 40px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateX(10px);
+        }
+
+        .list-item span {
+            margin-right: 16px;
+            font-size: 24px;
+        }
+
+        /* Yechim Section */
+        .yechim {
+            text-align: center;
+        }
+
+        .yechim-text {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .flow-step {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: background-color 0.3s ease;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        /* Cards Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .card.is-hovered {
+            transform: scale(1.05);
+        }
+
+        .card-emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h3 {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        /* Loyiha Holati */
+        .status {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .status-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 14px;
+            background: var(--bg);
+            border-radius: 100px;
+            margin-top: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 100px;
+            transition: width 2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer p:first-child {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        /* Utils */
+        .mt-4 { margin-top: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 56px; }
+            .hero h2 { font-size: 20px; }
+            .flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            section { padding: 60px 0; }
+            .theme-toggle { top: 16px; right: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" class="theme-toggle" aria-label="Mavzuni o'zgartirish">🌓</button>
+
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="badge">AI powered • EduTech • Uzbekistan</div>
+            <h1>720</h1>
+            <h2>Sun’iy intellekt asosida test natijalarini tahlil qilish va shaxsiy o‘quv strategiyasi platformasi</h2>
+            <p>Test natijalaringizni chuqur tahlil qiling va AI yordamida o'zlashtirish darajangizni oshiring.</p>
+            <button class="btn">Beta versiya yaqin orada</button>
+            <div class="hero-visual">🤖</div>
+        </section>
+
+        <!-- Muammo -->
+        <section id="muammo">
+            <div class="muammo">
+                <h2 class="section-title">Muammo</h2>
+                <div class="list-item">
+                    <span>❌</span>
+                    <p>Abituriyent qaysi mavzudan xato qilayotganini bilmaydi</p>
+                </div>
+                <div class="list-item">
+                    <span>❌</span>
+                    <p>Individual tahlil tizimi mavjud emas</p>
+                </div>
+                <div class="list-item">
+                    <span>❌</span>
+                    <p>Vaqt noto‘g‘ri taqsimlanadi</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Yechim -->
+        <section id="yechim" class="yechim">
+            <h2 class="section-title">Yechim</h2>
+            <p class="yechim-text">720 platformasi test natijalaringizni AI orqali tahlil qilib, aynan qaysi mavzularda oqsayotganingizni aniqlaydi va sizga moslashtirilgan o'quv rejasini taqdim etadi.</p>
+            <div class="flow">
+                <div class="flow-step">Yuklash</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">AI analiz</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Shaxsiy reja</div>
+            </div>
+        </section>
+
+        <!-- Imkoniyatlar -->
+        <section id="imkoniyatlar">
+            <h2 class="section-title">Asosiy imkoniyatlar</h2>
+            <div class="grid">
+                <div class="card">
+                    <span class="card-emoji">🤖</span>
+                    <h3>AI tahlil</h3>
+                </div>
+                <div class="card">
+                    <span class="card-emoji">📊</span>
+                    <h3>Mavzu bo‘yicha diagnostika</h3>
+                </div>
+                <div class="card">
+                    <span class="card-emoji">🧠</span>
+                    <h3>Shaxsiy o‘quv reja</h3>
+                </div>
+                <div class="card">
+                    <span class="card-emoji">📈</span>
+                    <h3>Progress monitoring</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Holat -->
+        <section id="holat" class="status">
+            <div class="status-content">
+                <h2 class="section-title">Loyiha holati</h2>
+                <p>720 platformasi hozirda ishlab chiqish bosqichida. Veb-platforma va Telegram bot integratsiyasi ustida texnik ishlar olib borilmoqda. Beta versiya yaqin orada ishga tushiriladi.</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <p style="margin-top: 16px; font-weight: 700; color: var(--primary); font-size: 20px;">60%</p>
+            </div>
+        </section>
+
+        <!-- Kimlar uchun -->
+        <section id="kimlar">
+            <h2 class="section-title">Kimlar uchun</h2>
+            <div class="grid">
+                <div class="card">
+                    <span class="card-emoji">🎓</span>
+                    <h3>Abituriyentlar</h3>
+                </div>
+                <div class="card">
+                    <span class="card-emoji">🏫</span>
+                    <h3>O‘quv markazlar</h3>
+                </div>
+                <div class="card">
+                    <span class="card-emoji">👨‍🏫</span>
+                    <h3>Repetitorlar</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kelajak -->
+        <section id="kelajak">
+            <h2 class="section-title">Kelajak rejasi</h2>
+            <div class="grid" style="grid-template-columns: 1fr;">
+                <div class="list-item">
+                    <span>📱</span>
+                    <p>Mobil ilova</p>
+                </div>
+                <div class="list-item">
+                    <span>📚</span>
+                    <p>Barcha fanlar</p>
+                </div>
+                <div class="list-item">
+                    <span>🤖</span>
+                    <p>Adaptiv AI tavsiyalar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>720.uz</p>
+            <p>© 2026 720 AI Study Mentor</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Logic
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            const updateIcon = (theme) => {
+                themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            };
+
+            // Check for saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                updateIcon(savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                body.setAttribute('data-theme', 'dark');
+                updateIcon('dark');
+            } else {
+                updateIcon('light');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            // Smooth scroll for internal navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Progress bar animation when visible
+            const progressBar = document.getElementById('progressBar');
+            const statusSection = document.getElementById('holat');
+
+            const observerOptions = {
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        progressBar.style.width = '60%';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            if (statusSection) {
+                observer.observe(statusSection);
+            }
+
+            // Simple hover interaction for cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.classList.add('is-hovered');
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.classList.remove('is-hovered');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
